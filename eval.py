@@ -3,7 +3,7 @@
 [EVALUATION]
 
 ANN 벤치마크 데이터셋 대상으로 
-1. accuracy
+1. accuracy (recall@k)
 2. memory usage
 3. search time
 4. training time
@@ -12,6 +12,7 @@ ANN 벤치마크 데이터셋 대상으로
 
 [QUESTION]
 
+모든 구현에 parallelization을 적용시킬 것인가
 ProductQuantizer에서 numpy 대신 pytorch로 바꾸면 GPU 사용이 가능한가
 
 
@@ -73,30 +74,30 @@ def get_recall(a, b, k):
         cumulative_recall += get_hit(set(a[i]), set(b[i])) / k;
     return cumulative_recall / n
 
-def brute_result(_, base, query, gt):
+def brute_result(base, query, gt):
     pq = ProductQuantizer()
     print("brute search start")
     search_start = time.perf_counter();
     _, topk_idx = pq.search_original(query, base, 100)
     search_end = time.perf_counter();
-    print(f"pq search time: {search_end - search_start}")
+    print(f"brute search time: {search_end - search_start}")
     print(f"[BRUTE] recall: {get_recall(topk_idx, gt, 100)}")
 
-def pq_result(train, base, query, gt):
-    pq = ProductQuantizer(M=16, Ks=256)
-    print("pq training start")
+def pq_result(train, base, query, gt, clustering):
+    pq = ProductQuantizer(clustering=clustering, M=16, Ks=256)
+    print(clustering + " pq training start")
     training_start = time.perf_counter();
     pq.train(train)
     pq.add(base)
     training_end = time.perf_counter();
-    print(f"pq training time: {training_end - training_start}")
+    print(f"{clustering} pq training time: {training_end - training_start}")
 
-    print("pq search start")
+    print(clustering + " pq search start")
     search_start = time.perf_counter();
     _, topk_idx = pq.search(query, topk=100)
     search_end = time.perf_counter();
-    print(f"pq search time: {search_end - search_start}")
-    print(f"[PQ] recall: {get_recall(topk_idx, gt, 100)}")
+    print(f"{clustering} pq search time: {search_end - search_start}")
+    print(f"[{clustering.upper()} PQ] recall: {get_recall(topk_idx, gt, 100)}")
 
 def faiss_result(train, base, query, gt):
     indexPQ = faiss.IndexPQ(train.shape[1], 16, 8, faiss.METRIC_L2)
@@ -150,7 +151,10 @@ if __name__ == "__main__":
 #     pq_recall = pq_result(X_train, X_base, X_query, gt)
 #     brute_recall = brute_result(X_train, X_base, X_query, gt)
 
-    evaluate(faiss_result, "faiss_result.csv", X_train, X_base, X_query[:10,:], gt)
-    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:10,:], gt)
-    evaluate(brute_result, "brute_result.csv", X_train, X_base, X_query[:10,:], gt)
+    evaluate(faiss_result, "faiss_result.csv", X_train, X_base, X_query[:100,:], gt)
+    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "k-means")
+    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "k-means++")
+    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "mini-batch-k-means")
+    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "bisecting-k-means")
+    evaluate(brute_result, "brute_result.csv", X_base, X_query[:100,:], gt)
 
