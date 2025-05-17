@@ -123,9 +123,8 @@ def evaluate(func,filename, *args):
     records = []
     timestamp = 0
     while thread.is_alive():
-        cpu_usage = p.cpu_percent(interval=None)
         memory_usage = p.memory_info().rss
-        records.append([timestamp, cpu_usage, memory_usage])
+        records.append([timestamp, memory_usage])
         timestamp += 1
         time.sleep(1)
 
@@ -133,7 +132,7 @@ def evaluate(func,filename, *args):
 
     with open(filename, mode="w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["timestamp", "cpu_usage_percent", "memory_usage_bytes"])
+        writer.writerow(["timestamp", "memory_usage_bytes"])
         writer.writerows(records)
 
 
@@ -151,10 +150,11 @@ if __name__ == "__main__":
 #     pq_recall = pq_result(X_train, X_base, X_query, gt)
 #     brute_recall = brute_result(X_train, X_base, X_query, gt)
 
-    evaluate(faiss_result, "faiss_result.csv", X_train, X_base, X_query[:100,:], gt)
-    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "k-means")
-    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "k-means++")
-    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "mini-batch-k-means")
-    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:100,:], gt, "bisecting-k-means")
-    evaluate(brute_result, "brute_result.csv", X_base, X_query[:100,:], gt)
+    os.makedirs("./results", exist_ok=True)
+    evaluate(faiss_result, "./results/faiss_result.csv", X_train, X_base, X_query[:100,:], gt)
+    evaluate(pq_result, "./results/k-means_pq_result.csv", X_train, X_base, X_query[:100,:], gt, "k-means")
+    evaluate(pq_result, "./results/k-means++_pq_result.csv", X_train, X_base, X_query[:100,:], gt, "k-means++")
+    evaluate(pq_result, "./results/mini-batch-k-menas_pq_result.csv", X_train, X_base, X_query[:100,:], gt, "mini-batch-k-means")
+    evaluate(pq_result, "./results/bisecting-k-means_pq_result.csv", X_train, X_base, X_query[:100,:], gt, "bisecting-k-means")
+    evaluate(brute_result, "./results/brute_result.csv", X_base, X_query[:100,:], gt)
 

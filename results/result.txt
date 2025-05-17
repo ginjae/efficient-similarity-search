@@ -1,0 +1,29 @@
+[INFO] './datasets/sift' 디렉토리가 이미 존재합니다. 다운로드를 생략합니다.
+faiss training start
+faiss training time: 44.925298587000725
+faiss search start
+faiss search time: 0.13550950399985595
+[FAISS] recall: 0.6352
+k-means pq training start
+k-means pq training time: 31.05317571300111
+k-means pq search start
+k-means pq search time: 1.5311009750002995
+[K-MEANS PQ] recall: 0.6320999999999999
+k-means++ pq training start
+k-means++ pq training time: 44.82397128999946
+k-means++ pq search start
+k-means++ pq search time: 1.9487492820007901
+[K-MEANS++ PQ] recall: 0.6408000000000003
+mini-batch-k-means pq training start
+mini-batch-k-means pq training time: 3.5262021189992083
+mini-batch-k-means pq search start
+mini-batch-k-means pq search time: 1.7434969460009597
+[MINI-BATCH-K-MEANS PQ] recall: 0.6326
+bisecting-k-means pq training start
+bisecting-k-means pq training time: 10.235103451001123
+bisecting-k-means pq search start
+bisecting-k-means pq search time: 15.567620597001223
+[BISECTING-K-MEANS PQ] recall: 0.6036
+brute search start
+brute search time: 25.541907658000127
+[BRUTE] recall: 1.0
