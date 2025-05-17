@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
+from joblib import Parallel, delayed
 
 class ProductQuantizer:
     def __init__(self, M=8, Ks=256, max_iter=100):
@@ -12,15 +13,16 @@ class ProductQuantizer:
     def train(self, X):
         """ PQ 학습: 각 서브공간에서 KMeans 수행 """
         _, D = X.shape
-        assert D % self.M == 0, "벡터 차원은 M으로 나누어져야 함"
+        assert D % self.M == 0, "벡터 차원은 M으로 나누어져야 합니다."
         self.ds = D // self.M
 
-        self.codebooks = []
-        for m in range(self.M):
-            subvectors = X[:, m*self.ds:(m+1)*self.ds]
+        def train_kmeans(subvectors):
             kmeans = KMeans(n_clusters=self.Ks, max_iter=self.max_iter, n_init=1, random_state=42)
             kmeans.fit(subvectors)
-            self.codebooks.append(kmeans)
+            return kmeans
+
+        subvectors_list = [X[:, m*self.ds:(m+1)*self.ds] for m in range(self.M)]
+        self.codebooks = Parallel(n_jobs=-1)(delayed(train_kmeans)(sv) for sv in subvectors_list)
 
     def add(self, X):
         self.codes = self.encode(X)
@@ -30,9 +32,14 @@ class ProductQuantizer:
         N = X.shape[0]
         codes = np.empty((N, self.M), dtype=np.uint8)
 
-        for m in range(self.M):
+        def encode_column(m):
             subvectors = X[:, m*self.ds:(m+1)*self.ds]
-            codes[:, m] = self.codebooks[m].predict(subvectors)
+            return self.codebooks[m].predict(subvectors)
+
+        results = Parallel(n_jobs=-1)(delayed(encode_column)(m) for m in range(self.M))
+
+        for m in range(self.M):
+            codes[:, m] = results[m]
 
         return codes
 
@@ -58,31 +65,26 @@ class ProductQuantizer:
         B = queries.shape[0]
         N = self.codes.shape[0]
 
-        all_distances = []
-        all_indices = []
-
-        for b in range(B):
-            query = queries[b]
-            # 1. 서브공간별 거리 테이블 계산
+        def process_query(query):
             dist_tables = []
             for m in range(self.M):
                 q_sub = query[m*self.ds:(m+1)*self.ds].reshape(1, -1)
                 centroids = self.codebooks[m].cluster_centers_
-                dists = np.linalg.norm(centroids - q_sub, axis=1) ** 2  # (Ks,)
+                dists = np.linalg.norm(centroids - q_sub, axis=1) ** 2
                 dist_tables.append(dists)
 
-            # 2. 전체 PQ 코드에 대한 근사 거리 계산
             distances = np.zeros(N, dtype=np.float32)
             for m in range(self.M):
                 distances += dist_tables[m][self.codes[:, m]]
 
-            # 3. top-k 인덱스 반환
             topk_idx = np.argpartition(distances, topk)[:topk]
             topk_sorted = topk_idx[np.argsort(distances[topk_idx])]
-            all_distances.append(distances[topk_sorted])
-            all_indices.append(topk_sorted)
+            return distances[topk_sorted], topk_sorted
 
-        return all_distances, all_indices  # 각각 (B, topk) 형태의 리스트
+        results = Parallel(n_jobs=-1)(delayed(process_query)(queries[b]) for b in range(B))
+
+        all_distances, all_indices = zip(*results)
+        return list(all_distances), list(all_indices)
 
     def search_original(self, queries, X, topk=10):
         """

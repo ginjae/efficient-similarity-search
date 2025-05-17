@@ -80,7 +80,7 @@ def brute_result(_, base, query, gt):
     _, topk_idx = pq.search_original(query, base, 100)
     search_end = time.perf_counter();
     print(f"pq search time: {search_end - search_start}")
-    return get_recall(topk_idx, gt, 100)
+    print(f"[BRUTE] recall: {get_recall(topk_idx, gt, 100)}")
 
 def pq_result(train, base, query, gt):
     pq = ProductQuantizer(M=16, Ks=256)
@@ -96,7 +96,7 @@ def pq_result(train, base, query, gt):
     _, topk_idx = pq.search(query, topk=100)
     search_end = time.perf_counter();
     print(f"pq search time: {search_end - search_start}")
-    return get_recall(topk_idx, gt, 100)
+    print(f"[PQ] recall: {get_recall(topk_idx, gt, 100)}")
 
 def faiss_result(train, base, query, gt):
     indexPQ = faiss.IndexPQ(train.shape[1], 16, 8, faiss.METRIC_L2)
@@ -112,9 +112,9 @@ def faiss_result(train, base, query, gt):
     _, topk_idx = indexPQ.search(query, 100)
     search_end = time.perf_counter();
     print(f"faiss search time: {search_end - search_start}")
-    return get_recall(topk_idx, gt, 100)
+    print(f"[FAISS] recall: {get_recall(topk_idx, gt, 100)}")
 
-def memory_eval(func,filename, *args):
+def evaluate(func,filename, *args):
     thread = threading.Thread(target=func, args=args)
     thread.start()
 
@@ -146,16 +146,11 @@ if __name__ == "__main__":
     X_query = dataset["query"]
     gt = dataset["gt"]
 
-    faiss_recall = faiss_result(X_train, X_base, X_query, gt)
-    print(f"[FAISS] recall: {faiss_recall}")
+#     faiss_recall = faiss_result(X_train, X_base, X_query, gt)
+#     pq_recall = pq_result(X_train, X_base, X_query, gt)
+#     brute_recall = brute_result(X_train, X_base, X_query, gt)
 
-    pq_recall = pq_result(X_train, X_base, X_query, gt)
-    print(f"[PQ] recall: {pq_recall}")
-
-    brute_recall = brute_result(X_train, X_base, X_query, gt)
-    print(f"[BRUTE] recall: {brute_recall}")
-
-    memory_eval(faiss_result, "faiss_result.csv", X_train, X_base, X_query, gt)
-    memory_eval(pq_result, "pq_result.csv", X_train, X_base, X_query, gt)
-    memory_eval(brute_result, "brute_result.csv", X_train, X_base, X_query, gt)
+    evaluate(faiss_result, "faiss_result.csv", X_train, X_base, X_query[:10,:], gt)
+    evaluate(pq_result, "pq_result.csv", X_train, X_base, X_query[:10,:], gt)
+    evaluate(brute_result, "brute_result.csv", X_train, X_base, X_query[:10,:], gt)
 
