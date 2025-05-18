@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.cluster import KMeans, MiniBatchKMeans, BisectingKMeans
 from joblib import Parallel, delayed
+from .clustering import train_clustering
 
 RANDOM_SEED = 42
 
@@ -19,69 +20,11 @@ class ProductQuantizer:
         assert D % self.M == 0, "벡터 차원은 M으로 나누어져야 합니다."
         self.ds = D // self.M
 
-        def train_clustering(subvectors):
-            if self.clustering == "k-means":
-                model = KMeans(
-                    n_clusters=self.Ks,
-                    init="random",              # k-means++ or random
-                    algorithm="elkan",          # elkan or lloyd
-                    max_iter=self.max_iter,     # maximum number of iterations
-                    n_init=1,                   # for fast training, just cluster once
-                    random_state=RANDOM_SEED    # random seed
-                )
-                model.fit(subvectors)
-                return model 
-            elif self.clustering == "k-means++":
-                model = KMeans(
-                    n_clusters=self.Ks,
-                    init="k-means++",
-                    algorithm="elkan",
-                    max_iter=self.max_iter,
-                    n_init=1,
-                    random_state=RANDOM_SEED
-                )
-                model.fit(subvectors)   
-                return model 
-            elif self.clustering == "mini-batch-k-means":
-                model = MiniBatchKMeans(
-                    n_clusters=self.Ks,
-                    init="k-means++",
-                    max_iter=self.max_iter,
-                    batch_size=1024,
-                    n_init=1,
-                    random_state=RANDOM_SEED
-                )
-                model.fit(subvectors)
-                return model
-            elif self.clustering == "bisecting-k-means":
-                model = BisectingKMeans(
-                    n_clusters=self.Ks,
-                    init="k-means++",
-                    algorithm="elkan",
-                    bisecting_strategy="largest_cluster",   # biggest_inertia or largest_cluster
-                    max_iter=self.max_iter,
-                    n_init=1,
-                    random_state=RANDOM_SEED
-                )
-                model.fit(subvectors)
-                return model
-# 메모리 사용량, 연산량 문제로 k-medoids는 사용 x
-#             elif self.clustering == "k-medoids":
-#                 kmedoids = KMedoids(
-#                     n_clusters=self.Ks,
-#                     method="alternate",         # alternate or pam
-#                     init="k-medoids++",         # random, heuristic, k-medoids++, or build
-#                     max_iter=self.max_iter,
-#                     random_state=RANDOM_SEED
-#                 )
-#                 kmedoids.fit(subvectors)
-#                 return kmedoids
-            else:
-                raise ValueError(f"Unsupported clustering method: {self.clustering}")
-
         subvectors_list = [X[:, m*self.ds:(m+1)*self.ds] for m in range(self.M)]
-        self.codebooks = Parallel(n_jobs=-1)(delayed(train_clustering)(sv) for sv in subvectors_list)
-
+        self.codebooks = Parallel(n_jobs=-1)(
+                delayed(train_clustering)(self.clustering, sv, self.Ks, self.max_iter)
+                for sv in subvectors_list
+        )
 
     def add(self, X):
         self.codes = self.encode(X)

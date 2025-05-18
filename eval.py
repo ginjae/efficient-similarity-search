@@ -26,7 +26,7 @@ import time
 import csv
 
 # PQ
-from product_quantizer import ProductQuantizer
+from pq_module.product_quantizer import ProductQuantizer
 
 # faiss
 import faiss
