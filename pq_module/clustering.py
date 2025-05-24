@@ -2,10 +2,10 @@ from sklearn.cluster import KMeans, MiniBatchKMeans, BisectingKMeans
 # from sklearn_extra.cluster import KMedoids  # 메모리 문제로 제외
 RANDOM_SEED = 42
 
-def train_clustering(method, subvectors, Ks, max_iter):
+def train_clustering(method, subvectors, n_clusters, max_iter):
     if method == "k-means":
         return KMeans(
-            n_clusters=Ks,
+            n_clusters=n_clusters,
             init="random",              # k-means++ or random
             algorithm="elkan",          # elkan or lloyd
             max_iter=max_iter,          # maximum number of iterations
@@ -15,7 +15,7 @@ def train_clustering(method, subvectors, Ks, max_iter):
 
     elif method == "k-means++":
         return KMeans(
-            n_clusters=Ks,
+            n_clusters=n_clusters,
             init="k-means++",
             algorithm="elkan",
             max_iter=max_iter,
@@ -25,7 +25,7 @@ def train_clustering(method, subvectors, Ks, max_iter):
 
     elif method == "mini-batch-k-means":
         return MiniBatchKMeans(
-            n_clusters=Ks,
+            n_clusters=n_clusters,
             init="k-means++",
             batch_size=1024,
             max_iter=max_iter,
@@ -35,7 +35,7 @@ def train_clustering(method, subvectors, Ks, max_iter):
 
     elif method == "bisecting-k-means":
         return BisectingKMeans(
-            n_clusters=Ks,
+            n_clusters=n_clusters,
             init="k-means++",
             algorithm="elkan",
             bisecting_strategy="largest_cluster",   # biggest_inertia or largest_cluster
@@ -47,7 +47,7 @@ def train_clustering(method, subvectors, Ks, max_iter):
 # 메모리 사용량, 연산량 문제로 k-medoids는 사용 x
 #     elif method == "k-medoids":
 #         return KMedoids(
-#             n_clusters=Ks,
+#             n_clusters=n_clusters,
 #             method="alternate",         # alternate or pam
 #             init="k-medoids++",         # random, heuristic, k-medoids++, or build
 #             max_iter=max_iter,
