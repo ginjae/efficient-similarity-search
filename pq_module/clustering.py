@@ -1,6 +1,6 @@
 from sklearn.cluster import KMeans, MiniBatchKMeans, BisectingKMeans
 # from sklearn_extra.cluster import KMedoids  # 메모리 문제로 제외
-RANDOM_SEED = 42
+RANDOM_SEED = 20211061
 
 def train_clustering(method, subvectors, n_clusters, max_iter):
     if method == "k-means":

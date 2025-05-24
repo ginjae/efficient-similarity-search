@@ -8,7 +8,7 @@
 conda create --name ess_env
 conda activate ess_env
 conda install -c pytorch -c nvidia faiss-gpu=1.7.0 pytorch=*=*cuda* pytorch-cuda=11 numpy psutil scikit-learn
-python eval.py > ./results/result.txt
+python eval.py <dataset_name>
 ```
 
 ## Clustering Methods

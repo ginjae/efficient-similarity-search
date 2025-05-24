@@ -1,0 +1,112 @@
+🧠 faiss pq training start
+⏱️ faiss pq training time: 21.459103583000342
+🔍 faiss pq search start
+⌛ faiss pq search time: 0.13081999400037603
+🎯 [FAISS PQ] RECALL: 0.5299
+
+🧠 faiss opq training start
+⏱️ faiss opq training time: 201.07756397000003
+🔍 faiss opq search start
+⌛ faiss opq search time: 0.2258312180001667
+🎯 [FAISS OPQ] RECALL: 0.5790999999999998
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 35.02912478500002
+🔍 k-means pq search start
+⌛ k-means pq search time: 1.7640588350000144
+🎯 [K-MEANS PQ] RECALL: 0.5324000000000001
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 34.813667776999864
+🔍 k-means pq search start
+⌛ k-means pq search time: 1.4998342280000543
+🎯 [K-MEANS PQ] RECALL: 0.5324000000000001
+
+🧠 k-means apq training start
+⏱️ k-means apq training time: 38.79316994800001
+🔍 k-means apq search start
+⌛ k-means apq search time: 1.3743331080004282
+🎯 [K-MEANS APQ] RECALL: 0.5361
+
+🧠 k-means opq training start
+⏱️ k-means opq training time: 314.44801088799977
+🔍 k-means opq search start
+⌛ k-means opq search time: 1.4632213360000605
+🎯 [K-MEANS OPQ] RECALL: 0.5430000000000001
+
+🧠 k-means++ pq training start
+⏱️ k-means++ pq training time: 43.40562187500018
+🔍 k-means++ pq search start
+⌛ k-means++ pq search time: 1.4030752399999074
+🎯 [K-MEANS++ PQ] RECALL: 0.5326000000000001
+
+🧠 k-means++ pq training start
+⏱️ k-means++ pq training time: 45.081027905000155
+🔍 k-means++ pq search start
+⌛ k-means++ pq search time: 1.4848154469996189
+🎯 [K-MEANS++ PQ] RECALL: 0.5326000000000001
+
+🧠 k-means++ apq training start
+⏱️ k-means++ apq training time: 47.0082950420001
+🔍 k-means++ apq search start
+⌛ k-means++ apq search time: 1.572534904999884
+🎯 [K-MEANS++ APQ] RECALL: 0.5342
+
+🧠 k-means++ opq training start
+⏱️ k-means++ opq training time: 371.48909071800017
+🔍 k-means++ opq search start
+⌛ k-means++ opq search time: 1.6187244170000668
+🎯 [K-MEANS++ OPQ] RECALL: 0.5445
+
+🧠 mini-batch-k-means pq training start
+⏱️ mini-batch-k-means pq training time: 2.4301109689999976
+🔍 mini-batch-k-means pq search start
+⌛ mini-batch-k-means pq search time: 1.641527268000118
+🎯 [MINI-BATCH-K-MEANS PQ] RECALL: 0.5305
+
+🧠 mini-batch-k-means pq training start
+⏱️ mini-batch-k-means pq training time: 2.2090439140001763
+🔍 mini-batch-k-means pq search start
+⌛ mini-batch-k-means pq search time: 1.4967139029999998
+🎯 [MINI-BATCH-K-MEANS PQ] RECALL: 0.5305
+
+🧠 mini-batch-k-means apq training start
+⏱️ mini-batch-k-means apq training time: 2.6041256630001044
+🔍 mini-batch-k-means apq search start
+⌛ mini-batch-k-means apq search time: 1.7173947050000606
+🎯 [MINI-BATCH-K-MEANS APQ] RECALL: 0.5375
+
+🧠 mini-batch-k-means opq training start
+⏱️ mini-batch-k-means opq training time: 13.759592896999948
+🔍 mini-batch-k-means opq search start
+⌛ mini-batch-k-means opq search time: 1.602075098000114
+🎯 [MINI-BATCH-K-MEANS OPQ] RECALL: 0.5493
+
+🧠 bisecting-k-means pq training start
+⏱️ bisecting-k-means pq training time: 6.104184864000217
+🔍 bisecting-k-means pq search start
+⌛ bisecting-k-means pq search time: 13.994983044000037
+🎯 [BISECTING-K-MEANS PQ] RECALL: 0.4832
+
+🧠 bisecting-k-means pq training start
+⏱️ bisecting-k-means pq training time: 5.4435690730001625
+🔍 bisecting-k-means pq search start
+⌛ bisecting-k-means pq search time: 14.025667853999948
+🎯 [BISECTING-K-MEANS PQ] RECALL: 0.4832
+
+🧠 bisecting-k-means apq training start
+⏱️ bisecting-k-means apq training time: 5.65955425500033
+🔍 bisecting-k-means apq search start
+⌛ bisecting-k-means apq search time: 14.798775875999581
+🎯 [BISECTING-K-MEANS APQ] RECALL: 0.4877000000000001
+
+🧠 bisecting-k-means opq training start
+⏱️ bisecting-k-means opq training time: 41.07279033299983
+🔍 bisecting-k-means opq search start
+⌛ bisecting-k-means opq search time: 15.145764593999957
+🎯 [BISECTING-K-MEANS OPQ] RECALL: 0.5231000000000001
+
+🔍 exact search start
+⌛ exact search time: 18.31927907699992
+🎯 [EXACT] RECALL: 1.0
+

@@ -132,7 +132,7 @@ def opq_result(train, base, query, gt, clustering):
     pq.train(train)
     pq.add(base)
     training_end = time.perf_counter()
-    print(f"⏱️ {clustering} aopq training time: {training_end - training_start}")
+    print(f"⏱️ {clustering} opq training time: {training_end - training_start}")
 
     print(f"🔍 {clustering} opq search start")
     search_start = time.perf_counter()
@@ -168,7 +168,7 @@ def faiss_opq_result(train, base, query, gt):
     index.train(train)
     index.add(base)
     training_end = time.perf_counter()
-    print(f"⏱️faiss opq training time: {training_end - training_start}")
+    print(f"⏱️ faiss opq training time: {training_end - training_start}")
 
     print("🔍 faiss opq search start")
     search_start = time.perf_counter()
@@ -205,9 +205,19 @@ if __name__ == "__main__":
 #     download_dataset("gist")
     
 #     dataset_name = "sift"
-    dataset_name = "gist"
+#     dataset_name = "gist"
 #     dataset_name = "deep"
 
+    if len(sys.argv) != 2:
+        print("Usage: python eval.py <dataset_name>")
+        sys.exit(1)
+    
+    arg = sys.argv[1].lower()
+    if arg != "sift" and arg != "gist" and arg != "deep":
+        print('Available Datasets: "sift", "gist", "deep"')
+        sys.exit(1)
+
+    dataset_name = arg
     dataset = load_dataset(dataset_name)
 
     train = dataset["train"]
@@ -218,32 +228,49 @@ if __name__ == "__main__":
 #     save_groundtruth(base, query, "./datasets/deep/deep_groundtruth.ivecs")
 #     save_groundtruth(base, query, "./datasets/gist/gist_groundtruth.ivecs")
 
-    os.makedirs("./results", exist_ok=True)
+    os.makedirs(f"./results/{dataset_name}", exist_ok=True)
 
-    evaluate(faiss_pq_result, "./results/faiss_pq_result.csv", train, base, query[:100,:], gt)
-    evaluate(faiss_opq_result, "./results/faiss_opq_result.csv", train, base, query[:100,:], gt)
+    class VerboseWriter:
+        def __init__(self, *writers):
+            self.writers = writers
 
+        def write(self, message):
+            for w in self.writers:
+                w.write(message)
+                w.flush()
+        def flush(self):
+            for w in self.writers:
+                w.flush()
 
-    evaluate(pq_result, "./results/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means")
-    evaluate(apq_result, "./results/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means")
-    evaluate(opq_result, "./results/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means")
-
-
-    evaluate(pq_result, "./results/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++")
-    evaluate(apq_result, "./results/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++")
-    evaluate(opq_result, "./results/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++")
-
-
-    evaluate(pq_result, "./results/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
-    evaluate(apq_result, "./results/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
-    evaluate(opq_result, "./results/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
+    sys.stdout = VerboseWriter(sys.__stdout__, open(f"./results/{dataset_name}/log.txt", "w"))
+    evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt)
+    evaluate(faiss_opq_result, f"./results/{dataset_name}/faiss_opq_result.csv", train, base, query[:100,:], gt)
 
 
-    evaluate(pq_result, "./results/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
-    evaluate(apq_result, "./results/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
-    evaluate(opq_result, "./results/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means")
+    evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means")
+    evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means")
 
 
-    evaluate(exact_result, "./results/brute_result.csv", base, query[:100,:], gt)
+    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++")
+    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++")
+    evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++")
+    evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++")
+
+
+    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
+    evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
+    evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
+
+
+    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
+    evaluate(apq_result, f"./results/{dataset_name}/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
+    evaluate(opq_result, f"./results/{dataset_name}/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
+
+
+    evaluate(exact_result, f"./results/{dataset_name}/brute_result.csv", base, query[:100,:], gt)
 
 
