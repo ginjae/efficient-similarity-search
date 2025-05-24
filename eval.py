@@ -29,6 +29,10 @@ from pq_module.optimized_product_quantizer import OptimizedProductQuantizer
 import faiss
 from faiss.contrib.vecs_io import ivecs_read, fvecs_read, ivecs_write
 
+# fashion-mnist
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+
 
 """ Preparation """
 def download_dataset(name):
@@ -55,10 +59,17 @@ def download_dataset(name):
     return target_dir
 
 def load_dataset(name):
-    xt = fvecs_read(f"datasets/{name}/{name}_learn.fvecs")
-    xb = fvecs_read(f"datasets/{name}/{name}_base.fvecs")
-    xq = fvecs_read(f"datasets/{name}/{name}_query.fvecs")
-    gt = ivecs_read(f"datasets/{name}/{name}_groundtruth.ivecs")
+    if name == "fashion-mnist":
+        fashion = fetch_openml("Fashion-MNIST", version=1, as_frame=False, parser="auto")
+        X = fashion["data"].astype(np.float32) / 255
+        xt, xq = train_test_split(X, test_size=10_000, random_state=20211061)
+        xt, xb = train_test_split(xt, test_size=40_000, random_state=20211061)
+        _, gt = ProductQuantizer().exact_search(xq, xb, 100)
+    else:
+        xt = fvecs_read(f"datasets/{name}/{name}_learn.fvecs")
+        xb = fvecs_read(f"datasets/{name}/{name}_base.fvecs")
+        xq = fvecs_read(f"datasets/{name}/{name}_query.fvecs")
+        gt = ivecs_read(f"datasets/{name}/{name}_groundtruth.ivecs")
 
     return { "train": xt, "base": xb, "query": xq, "gt": gt }
 
@@ -213,7 +224,7 @@ if __name__ == "__main__":
         sys.exit(1)
     
     arg = sys.argv[1].lower()
-    if arg != "sift" and arg != "gist" and arg != "deep":
+    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist":
         print('Available Datasets: "sift", "gist", "deep"')
         sys.exit(1)
 

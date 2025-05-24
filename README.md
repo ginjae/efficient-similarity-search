@@ -32,11 +32,15 @@ explanation: ANN benchmark datasets
     - learn: 100,000
     - base: 1,000,000
     - query: 10,000
+- Fashion-MNIST: 784-dimensional
+    - learn: 10,000
+    - base: 50,000
+    - query: 10,000
 - GIST: 960-dimensional (sliced from [ANN_GIST1M](http://corpus-texmex.irisa.fr/))
     - learn: 10,000
     - base: 100,000
     - query: 1,000
-- SIFT: 128-dimensional ([ANN_SIFT1M](http://corpus-texmex.irisa.fr/))
+<!-- - SIFT: 128-dimensional ([ANN_SIFT1M](http://corpus-texmex.irisa.fr/))
     - learn: 100,000
     - base: 1,000,000
-    - query: 10,000
+    - query: 10,000 -->

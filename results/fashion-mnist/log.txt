@@ -1,0 +1,112 @@
+🧠 faiss pq training start
+⏱️ faiss pq training time: 16.07124767700043
+🔍 faiss pq search start
+⌛ faiss pq search time: 0.3508660109991979
+🎯 [FAISS PQ] RECALL: 0.6749999999999998
+
+🧠 faiss opq training start
+⏱️ faiss opq training time: 131.13555758100028
+🔍 faiss opq search start
+⌛ faiss opq search time: 0.015569813000183785
+🎯 [FAISS OPQ] RECALL: 0.7046999999999994
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 5.244695446000151
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.38344825799958926
+🎯 [K-MEANS PQ] RECALL: 0.6739000000000002
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 3.6692166499997256
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.3457592590002605
+🎯 [K-MEANS PQ] RECALL: 0.6739000000000002
+
+🧠 k-means apq training start
+⏱️ k-means apq training time: 4.142476061999332
+🔍 k-means apq search start
+⌛ k-means apq search time: 0.38207210499967914
+🎯 [K-MEANS APQ] RECALL: 0.6738000000000001
+
+🧠 k-means opq training start
+⏱️ k-means opq training time: 36.777895794999495
+🔍 k-means opq search start
+⌛ k-means opq search time: 0.5469973159997608
+🎯 [K-MEANS OPQ] RECALL: 0.7004999999999997
+
+🧠 k-means++ pq training start
+⏱️ k-means++ pq training time: 6.078724604999479
+🔍 k-means++ pq search start
+⌛ k-means++ pq search time: 0.29154281800038007
+🎯 [K-MEANS++ PQ] RECALL: 0.6690999999999999
+
+🧠 k-means++ pq training start
+⏱️ k-means++ pq training time: 5.787643478000064
+🔍 k-means++ pq search start
+⌛ k-means++ pq search time: 0.29707794499972806
+🎯 [K-MEANS++ PQ] RECALL: 0.6690999999999999
+
+🧠 k-means++ apq training start
+⏱️ k-means++ apq training time: 5.2513216999996075
+🔍 k-means++ apq search start
+⌛ k-means++ apq search time: 0.32788925700060645
+🎯 [K-MEANS++ APQ] RECALL: 0.6858000000000003
+
+🧠 k-means++ opq training start
+⏱️ k-means++ opq training time: 53.00416083100026
+🔍 k-means++ opq search start
+⌛ k-means++ opq search time: 0.5321726550000676
+🎯 [K-MEANS++ OPQ] RECALL: 0.7041000000000001
+
+🧠 mini-batch-k-means pq training start
+⏱️ mini-batch-k-means pq training time: 1.2013355220005906
+🔍 mini-batch-k-means pq search start
+⌛ mini-batch-k-means pq search time: 0.3159739129996524
+🎯 [MINI-BATCH-K-MEANS PQ] RECALL: 0.6667000000000002
+
+🧠 mini-batch-k-means pq training start
+⏱️ mini-batch-k-means pq training time: 1.1137579779997395
+🔍 mini-batch-k-means pq search start
+⌛ mini-batch-k-means pq search time: 0.3734015849995558
+🎯 [MINI-BATCH-K-MEANS PQ] RECALL: 0.6667000000000002
+
+🧠 mini-batch-k-means apq training start
+⏱️ mini-batch-k-means apq training time: 1.4388718190002692
+🔍 mini-batch-k-means apq search start
+⌛ mini-batch-k-means apq search time: 0.33321991700086073
+🎯 [MINI-BATCH-K-MEANS APQ] RECALL: 0.6796000000000002
+
+🧠 mini-batch-k-means opq training start
+⏱️ mini-batch-k-means opq training time: 14.963105362000533
+🔍 mini-batch-k-means opq search start
+⌛ mini-batch-k-means opq search time: 0.6741185689998019
+🎯 [MINI-BATCH-K-MEANS OPQ] RECALL: 0.7110999999999998
+
+🧠 bisecting-k-means pq training start
+⏱️ bisecting-k-means pq training time: 6.162478557999748
+🔍 bisecting-k-means pq search start
+⌛ bisecting-k-means pq search time: 13.855665858000066
+🎯 [BISECTING-K-MEANS PQ] RECALL: 0.5107999999999999
+
+🧠 bisecting-k-means pq training start
+⏱️ bisecting-k-means pq training time: 5.660019111999645
+🔍 bisecting-k-means pq search start
+⌛ bisecting-k-means pq search time: 12.879315484000472
+🎯 [BISECTING-K-MEANS PQ] RECALL: 0.5107999999999999
+
+🧠 bisecting-k-means apq training start
+⏱️ bisecting-k-means apq training time: 7.369189441999879
+🔍 bisecting-k-means apq search start
+⌛ bisecting-k-means apq search time: 13.179985078000755
+🎯 [BISECTING-K-MEANS APQ] RECALL: 0.5131000000000002
+
+🧠 bisecting-k-means opq training start
+⏱️ bisecting-k-means opq training time: 43.90705748599976
+🔍 bisecting-k-means opq search start
+⌛ bisecting-k-means opq search time: 13.179375532999984
+🎯 [BISECTING-K-MEANS OPQ] RECALL: 0.6953000000000001
+
+🔍 exact search start
+⌛ exact search time: 5.049339521000547
+🎯 [EXACT] RECALL: 1.0
+
