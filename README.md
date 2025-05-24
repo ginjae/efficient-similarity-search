@@ -11,14 +11,16 @@ conda install -c pytorch -c nvidia faiss-gpu=1.7.0 pytorch=*=*cuda* pytorch-cuda
 python eval.py > ./results/result.txt
 ```
 
-## Clustering
+## Clustering Methods
 ### 1. K-Means
 ### 2. K-Means++
 ### 3. Mini-Batch K-Means
 ### 4. Bisecting K-Means
 
-## Partitioning
-### 1. Variance-based
+## Partitioning Methods
+### 1. Fixed Partitioning
+### 2. Adaptive Partitioning via Correlation-Based Clustering
+### 3. Adaptive Partitioning via a Learned Rotation Matrix (Optimized Product Quantization)
 
 ## Experiments
 ### Datasets

@@ -23,7 +23,7 @@ class OptimizedProductQuantizer:
         self.R = np.eye(D, dtype=X.dtype)
 
         for it in range(self.opq_iter):
-            print(f"it = {it}")
+#             print(f"it = {it}")
             # 1) Rotate dataset
             X_rot = X.dot(self.R)
 

@@ -1,7 +1,7 @@
+"""
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-
 
 def balanced_clusters_by_sum(vec, m):
     n = vec.size
@@ -39,47 +39,47 @@ def train_partitioning(X, n_clusters):
     subspace_dims = balanced_clusters_by_sum(dim_variances, n_clusters)
     
     return subspace_dims
+"""
 
-# from sklearn.cluster import AgglomerativeClustering
-# 
-# def rebalance_clusters(clusters, m=16):
-#     elements = [x for cluster in clusters for x in cluster]
-#     n = len(elements)
-#     k, r = divmod(n, m)
-#     
-#     result = []
-#     start = 0
-#     for i in range(m):
-#         end = start + k + (1 if i < r else 0)
-#         result.append(elements[start:end])
-#         start = end
-#     return result
-# 
-# def train_partitioning(X, n_clusters):
-#     assert len(X.shape) == 2
-# 
-#     # 1. 차원 간 피어슨 상관계수 계산
-#     corr_matrix = np.corrcoef(X.T)  # shape: (d, d)
-#     corr_matrix = np.abs(corr_matrix)
-#     
-#     # 2. 거리 행렬로 변환
-#     distance_matrix = 1 - corr_matrix
-#     
-#     # 3. Agglomerative Clustering 수행
-#     clustering = AgglomerativeClustering(
-#         n_clusters=n_clusters,
-#         metric="precomputed",
-#         linkage="average"
-#     )
-#     dim_labels = clustering.fit_predict(distance_matrix)
-#     
-#     # 4. 결과 정리: 클러스터별 차원 인덱스 그룹
-#     clusters = [[] for _ in range(n_clusters)]
-#     for dim_idx, label in enumerate(dim_labels):
-#         clusters[label].append(dim_idx)
-# 
-#     print(clusters)
-#     clusters = rebalance_clusters(clusters)
-#     print(clusters)
-# 
-#     return clusters
+import numpy as np
+from sklearn.cluster import AgglomerativeClustering
+
+def rebalance_clusters(clusters, m=16):
+    elements = [x for cluster in clusters for x in cluster]
+    n = len(elements)
+    k, r = divmod(n, m)
+    
+    result = []
+    start = 0
+    for i in range(m):
+        end = start + k + (1 if i < r else 0)
+        result.append(elements[start:end])
+        start = end
+    return result
+
+def train_partitioning(X, n_clusters):
+    assert len(X.shape) == 2
+
+    # 1. 차원 간 피어슨 상관계수 계산
+    corr_matrix = np.corrcoef(X.T)  # shape: (d, d)
+    corr_matrix = np.abs(corr_matrix)
+    
+    # 2. 거리 행렬로 변환
+    distance_matrix = 1 - corr_matrix
+    
+    # 3. Agglomerative Clustering 수행
+    clustering = AgglomerativeClustering(
+        n_clusters=n_clusters,
+        metric="precomputed",
+        linkage="average"
+    )
+    dim_labels = clustering.fit_predict(distance_matrix)
+    
+    # 4. 결과 정리: 클러스터별 차원 인덱스 그룹
+    clusters = [[] for _ in range(n_clusters)]
+    for dim_idx, label in enumerate(dim_labels):
+        clusters[label].append(dim_idx)
+
+    clusters = rebalance_clusters(clusters)
+
+    return clusters
