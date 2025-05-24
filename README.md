@@ -1,7 +1,7 @@
 # CSE304 Term Project
 20211061 Jaemin Kim
 
-# Efficient Similarity Search via Product Quantization with Improved Clustering
+# Efficient Similarity Search via Adaptive Product Quantization
 
 ## Quick Start
 ```bash
@@ -11,8 +11,30 @@ conda install -c pytorch -c nvidia faiss-gpu=1.7.0 pytorch=*=*cuda* pytorch-cuda
 python eval.py > ./results/result.txt
 ```
 
-## Clustering Algorithms
+## Clustering
 ### 1. K-Means
 ### 2. K-Means++
 ### 3. Mini-Batch K-Means
 ### 4. Bisecting K-Means
+
+## Partitioning
+### 1. Variance-based
+
+## Experiments
+### Datasets
+datasets used: [DOWNLOAD](https://unistackr0-my.sharepoint.com/:u:/g/personal/jm611_unist_ac_kr/ES1UA4V2i45Fmqu-_1BkFW0BhkaE7JAkA9Cha2G5w3G1Ag?e=EKfurg)
+
+explanation: ANN benchmark datasets
+
+- DEEP: 96-dimensional (sliced from [Deep1B](https://github.com/arbabenko/GNOIMI/blob/master/downloadDeep1B.py))
+    - learn: 100,000
+    - base: 1,000,000
+    - query: 10,000
+- GIST: 960-dimensional (sliced from [ANN_GIST1M](http://corpus-texmex.irisa.fr/))
+    - learn: 10,000
+    - base: 100,000
+    - query: 1,000
+- SIFT: 128-dimensional ([ANN_SIFT1M](http://corpus-texmex.irisa.fr/))
+    - learn: 100,000
+    - base: 1,000,000
+    - query: 10,000
