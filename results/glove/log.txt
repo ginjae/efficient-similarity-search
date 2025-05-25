@@ -1,0 +1,112 @@
+🧠 faiss pq training start
+⏱️ faiss pq training time: 2.6417297450025217
+🔍 faiss pq search start
+⌛ faiss pq search time: 0.04738662599993404
+🎯 [FAISS PQ] RECALL: 0.2619
+
+🧠 faiss opq training start
+⏱️ faiss opq training time: 34.24181503499858
+🔍 faiss opq search start
+⌛ faiss opq search time: 0.022549850000359584
+🎯 [FAISS OPQ] RECALL: 0.2902000000000001
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 2.5690282979994663
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.33314765300019644
+🎯 [K-MEANS PQ] RECALL: 0.2662999999999999
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 1.3747126879970892
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.30411917599849403
+🎯 [K-MEANS PQ] RECALL: 0.2662999999999999
+
+🧠 k-means apq training start
+⏱️ k-means apq training time: 1.4627460729971062
+🔍 k-means apq search start
+⌛ k-means apq search time: 0.32980967099865666
+🎯 [K-MEANS APQ] RECALL: 0.2673
+
+🧠 k-means opq training start
+⏱️ k-means opq training time: 11.250634010000795
+🔍 k-means opq search start
+⌛ k-means opq search time: 0.4181330120045459
+🎯 [K-MEANS OPQ] RECALL: 0.29739999999999994
+
+🧠 k-means++ pq training start
+⏱️ k-means++ pq training time: 2.044674254000711
+🔍 k-means++ pq search start
+⌛ k-means++ pq search time: 0.33679846199811436
+🎯 [K-MEANS++ PQ] RECALL: 0.25909999999999994
+
+🧠 k-means++ pq training start
+⏱️ k-means++ pq training time: 1.9311848760044086
+🔍 k-means++ pq search start
+⌛ k-means++ pq search time: 0.31332529099745443
+🎯 [K-MEANS++ PQ] RECALL: 0.25909999999999994
+
+🧠 k-means++ apq training start
+⏱️ k-means++ apq training time: 2.0115507899972727
+🔍 k-means++ apq search start
+⌛ k-means++ apq search time: 0.326456483999209
+🎯 [K-MEANS++ APQ] RECALL: 0.27819999999999995
+
+🧠 k-means++ opq training start
+⏱️ k-means++ opq training time: 16.803986357001122
+🔍 k-means++ opq search start
+⌛ k-means++ opq search time: 0.44612127800064627
+🎯 [K-MEANS++ OPQ] RECALL: 0.29799999999999993
+
+🧠 mini-batch-k-means pq training start
+⏱️ mini-batch-k-means pq training time: 0.72834285999852
+🔍 mini-batch-k-means pq search start
+⌛ mini-batch-k-means pq search time: 0.33077105499978643
+🎯 [MINI-BATCH-K-MEANS PQ] RECALL: 0.2656999999999999
+
+🧠 mini-batch-k-means pq training start
+⏱️ mini-batch-k-means pq training time: 0.7304934769999818
+🔍 mini-batch-k-means pq search start
+⌛ mini-batch-k-means pq search time: 0.32011147800221806
+🎯 [MINI-BATCH-K-MEANS PQ] RECALL: 0.2656999999999999
+
+🧠 mini-batch-k-means apq training start
+⏱️ mini-batch-k-means apq training time: 0.8483537200008868
+🔍 mini-batch-k-means apq search start
+⌛ mini-batch-k-means apq search time: 0.3125671849993523
+🎯 [MINI-BATCH-K-MEANS APQ] RECALL: 0.2725999999999999
+
+🧠 mini-batch-k-means opq training start
+⏱️ mini-batch-k-means opq training time: 6.658715456003847
+🔍 mini-batch-k-means opq search start
+⌛ mini-batch-k-means opq search time: 0.4249764160049381
+🎯 [MINI-BATCH-K-MEANS OPQ] RECALL: 0.30010000000000003
+
+🧠 bisecting-k-means pq training start
+⏱️ bisecting-k-means pq training time: 3.708708115002082
+🔍 bisecting-k-means pq search start
+⌛ bisecting-k-means pq search time: 8.614137325996126
+🎯 [BISECTING-K-MEANS PQ] RECALL: 0.21700000000000003
+
+🧠 bisecting-k-means pq training start
+⏱️ bisecting-k-means pq training time: 3.4290181800024584
+🔍 bisecting-k-means pq search start
+⌛ bisecting-k-means pq search time: 8.09991309599718
+🎯 [BISECTING-K-MEANS PQ] RECALL: 0.21700000000000003
+
+🧠 bisecting-k-means apq training start
+⏱️ bisecting-k-means apq training time: 3.6878362330025993
+🔍 bisecting-k-means apq search start
+⌛ bisecting-k-means apq search time: 8.477364831000159
+🎯 [BISECTING-K-MEANS APQ] RECALL: 0.22459999999999997
+
+🧠 bisecting-k-means opq training start
+⏱️ bisecting-k-means opq training time: 32.40551965600025
+🔍 bisecting-k-means opq search start
+⌛ bisecting-k-means opq search time: 12.648204292003356
+🎯 [BISECTING-K-MEANS OPQ] RECALL: 0.24579999999999994
+
+🔍 exact search start
+⌛ exact search time: 5.17987220500072
+🎯 [EXACT] RECALL: 1.0
+

@@ -32,6 +32,7 @@ from faiss.contrib.vecs_io import ivecs_read, fvecs_read, ivecs_write
 # fashion-mnist
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 
 """ Preparation """
@@ -61,9 +62,25 @@ def download_dataset(name):
 def load_dataset(name):
     if name == "fashion-mnist":
         fashion = fetch_openml("Fashion-MNIST", version=1, as_frame=False, parser="auto")
-        X = fashion["data"].astype(np.float32) / 255
+        scaler = StandardScaler()
+        X = scaler.fit_transform(fashion["data"].astype(np.float32))
         xt, xq = train_test_split(X, test_size=10_000, random_state=20211061)
-        xt, xb = train_test_split(xt, test_size=40_000, random_state=20211061)
+        xt, xb = train_test_split(xt, test_size=50_000, random_state=20211061)
+        xt, _ = train_test_split(xt, test_size=5_000, random_state=20211061)
+        _, gt = ProductQuantizer().exact_search(xq, xb, 100)
+    elif name == "glove":
+        X = []
+        with open("./datasets/glove/glove.6B.300d.txt", "r") as f:
+            for i, line in enumerate(f):
+                if i >= 111_000:
+                    break
+                parts = line.strip().split()
+                vector = np.array(parts[1:], dtype=np.float32)
+                X.append(vector)
+        X = np.array(X, dtype=np.float32)
+        X = np.concatenate((X, X[:,-4:]), axis=1)
+        xt, xq = train_test_split(X, test_size=1_000, random_state=20211061)
+        xt, xb = train_test_split(xt, test_size=100_000, random_state=20211061)
         _, gt = ProductQuantizer().exact_search(xq, xb, 100)
     else:
         xt = fvecs_read(f"datasets/{name}/{name}_learn.fvecs")
@@ -224,8 +241,8 @@ if __name__ == "__main__":
         sys.exit(1)
     
     arg = sys.argv[1].lower()
-    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist":
-        print('Available Datasets: "sift", "gist", "deep"')
+    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove":
+        print('Available Datasets: "sift", "gist", "deep", "fashion-mnist", "glove"')
         sys.exit(1)
 
     dataset_name = arg
