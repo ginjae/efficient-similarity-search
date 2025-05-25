@@ -67,7 +67,7 @@ def load_dataset(name):
         xt, xq = train_test_split(X, test_size=10_000, random_state=20211061)
         xt, xb = train_test_split(xt, test_size=50_000, random_state=20211061)
         xt, _ = train_test_split(xt, test_size=5_000, random_state=20211061)
-        _, gt = ProductQuantizer().exact_search(xq, xb, 100)
+        _, gt = exact_search(xq, xb, 100)
     elif name == "glove":
         X = []
         with open("./datasets/glove/glove.6B.300d.txt", "r") as f:
@@ -78,10 +78,9 @@ def load_dataset(name):
                 vector = np.array(parts[1:], dtype=np.float32)
                 X.append(vector)
         X = np.array(X, dtype=np.float32)
-        X = np.concatenate((X, X[:,-4:]), axis=1)
         xt, xq = train_test_split(X, test_size=1_000, random_state=20211061)
         xt, xb = train_test_split(xt, test_size=100_000, random_state=20211061)
-        _, gt = ProductQuantizer().exact_search(xq, xb, 100)
+        _, gt = exact_search(xq, xb, 100)
     else:
         xt = fvecs_read(f"datasets/{name}/{name}_learn.fvecs")
         xb = fvecs_read(f"datasets/{name}/{name}_base.fvecs")
@@ -91,8 +90,7 @@ def load_dataset(name):
     return { "train": xt, "base": xb, "query": xq, "gt": gt }
 
 def save_groundtruth(base, query, filename):
-    pq = ProductQuantizer()
-    _, topk_idx = pq.exact_search(query, base, 100)
+    _, topk_idx = exact_search(query, base, 100)
     ivecs_write(filename, np.array(topk_idx, dtype=np.int32))
 
 
@@ -107,20 +105,44 @@ def get_recall(a, b, k):
         cumulative_recall += get_hit(set(a[i]), set(b[i])) / k
     return cumulative_recall / n
 
+def exact_search(queries, X, topk=10):
+    """
+    query: (B, D) 형태의 원본 쿼리 벡터들
+    X: (N, D) 압축되지 않은 데이터 벡터들
+    topk: 상위 k개 인덱스 반환
+    """
+    assert queries.shape[1] == X.shape[1]
+    B = queries.shape[0]
+
+    all_distances = []
+    all_indices = []
+
+    for b in range(B):
+        query = queries[b]
+        # 1. 거리 계산
+        diff = X - query.reshape(1, -1)
+        distances = np.sum(diff**2, axis=1)
+
+        # 2. top-k 추출
+        topk_idx = np.argpartition(distances, topk)[:topk]
+        topk_sorted = topk_idx[np.argsort(distances[topk_idx])]
+        all_distances.append(distances[topk_sorted])
+        all_indices.append(topk_sorted)
+
+    return all_distances, all_indices  # 각각 (B, topk) 형태의 리스트
 
 """ Evaluation """
 def exact_result(base, query, gt):
-    pq = ProductQuantizer()
     print("🔍 exact search start")
     search_start = time.perf_counter()
-    _, topk_idx = pq.exact_search(query, base, 100)
+    _, topk_idx = exact_search(query, base, 100)
     search_end = time.perf_counter()
     print(f"⌛ exact search time: {search_end - search_start}")
     print(f"🎯 [EXACT] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
-def pq_result(train, base, query, gt, clustering):
-    pq = ProductQuantizer(clustering=clustering)
+def pq_result(train, base, query, gt, clustering, m):
+    pq = ProductQuantizer(clustering=clustering, m=m)
     print(f"🧠 {clustering} pq training start")
     training_start = time.perf_counter()
     pq.train(train)
@@ -136,8 +158,8 @@ def pq_result(train, base, query, gt, clustering):
     print(f"🎯 [{clustering.upper()} PQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
-def apq_result(train, base, query, gt, clustering):
-    pq = AdaptiveProductQuantizer(clustering=clustering)
+def apq_result(train, base, query, gt, clustering, m):
+    pq = AdaptiveProductQuantizer(clustering=clustering, m=m)
     print(f"🧠 {clustering} apq training start")
     training_start = time.perf_counter()
     pq.train(train)
@@ -153,8 +175,8 @@ def apq_result(train, base, query, gt, clustering):
     print(f"🎯 [{clustering.upper()} APQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
-def opq_result(train, base, query, gt, clustering):
-    pq = OptimizedProductQuantizer(clustering=clustering)
+def opq_result(train, base, query, gt, clustering, m):
+    pq = OptimizedProductQuantizer(clustering=clustering, m=m)
     print(f"🧠 {clustering} opq training start")
     training_start = time.perf_counter()
     pq.train(train)
@@ -170,8 +192,8 @@ def opq_result(train, base, query, gt, clustering):
     print(f"🎯 [{clustering.upper()} OPQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
-def faiss_pq_result(train, base, query, gt):
-    indexPQ = faiss.IndexPQ(train.shape[1], 16, 8, faiss.METRIC_L2)
+def faiss_pq_result(train, base, query, gt, m):
+    indexPQ = faiss.IndexPQ(train.shape[1], m, 8, faiss.METRIC_L2)
     print("🧠 faiss pq training start")
     training_start = time.perf_counter()
     indexPQ.train(train)
@@ -187,9 +209,9 @@ def faiss_pq_result(train, base, query, gt):
     print(f"🎯 [FAISS PQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
-def faiss_opq_result(train, base, query, gt):
-    opq_matrix = faiss.OPQMatrix(train.shape[1], 16)
-    indexPQ = faiss.IndexPQ(train.shape[1], 16, 8, faiss.METRIC_L2)
+def faiss_opq_result(train, base, query, gt, m):
+    opq_matrix = faiss.OPQMatrix(train.shape[1], m)
+    indexPQ = faiss.IndexPQ(train.shape[1], m, 8, faiss.METRIC_L2)
     index = faiss.IndexPreTransform(opq_matrix, indexPQ)
     print("🧠 faiss opq training start")
     training_start = time.perf_counter()
@@ -241,11 +263,15 @@ if __name__ == "__main__":
         sys.exit(1)
     
     arg = sys.argv[1].lower()
-    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove":
+    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove" and arg != "gist_m":
         print('Available Datasets: "sift", "gist", "deep", "fashion-mnist", "glove"')
         sys.exit(1)
 
-    dataset_name = arg
+
+    if arg == "gist_m":
+        dataset_name = "gist"
+    else:
+        dataset_name = arg
     dataset = load_dataset(dataset_name)
 
     train = dataset["train"]
@@ -256,7 +282,7 @@ if __name__ == "__main__":
 #     save_groundtruth(base, query, "./datasets/deep/deep_groundtruth.ivecs")
 #     save_groundtruth(base, query, "./datasets/gist/gist_groundtruth.ivecs")
 
-    os.makedirs(f"./results/{dataset_name}", exist_ok=True)
+    os.makedirs(f"./results/{arg}", exist_ok=True)
 
     class VerboseWriter:
         def __init__(self, *writers):
@@ -270,33 +296,65 @@ if __name__ == "__main__":
             for w in self.writers:
                 w.flush()
 
-    sys.stdout = VerboseWriter(sys.__stdout__, open(f"./results/{dataset_name}/log.txt", "w"))
-    evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt)
-    evaluate(faiss_opq_result, f"./results/{dataset_name}/faiss_opq_result.csv", train, base, query[:100,:], gt)
+    if dataset_name == "glove":
+        m = 30
+    else:
+        m = 16
+
+    # print(f"[Dataset: {dataset_name}]")
+    # print(f"📌 Vector dimension: {train.shape[1]}")
+    # print(f"📌 # of subvectors: {m}")
+    # print("-" * 60)
+
+    sys.stdout = VerboseWriter(sys.__stdout__, open(f"./results/{arg}/log.txt", "w"))
+
+    if arg == "gist_m":
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_4.csv", train, base, query[:100,:], gt, "k-means", 4)
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_4.csv", train, base, query[:100,:], gt, "k-means", 4)
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_4.csv", train, base, query[:100,:], gt, "k-means", 4)
+
+        print("[m=4]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_4.csv", train, base, query[:100,:], gt, "k-means", 4)
+        print("[m=8]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_8.csv", train, base, query[:100,:], gt, "k-means", 8)
+        print("[m=16]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_16.csv", train, base, query[:100,:], gt, "k-means", 16)
+        print("[m=30]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_30.csv", train, base, query[:100,:], gt, "k-means", 30)
+        print("[m=60]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_60.csv", train, base, query[:100,:], gt, "k-means", 60)
+        print("[m=120]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_120.csv", train, base, query[:100,:], gt, "k-means", 120)
+        print("[m=240]")
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_m_240.csv", train, base, query[:100,:], gt, "k-means", 240)
+        exit(0)
+
+    evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt, m)
+    evaluate(faiss_opq_result, f"./results/{dataset_name}/faiss_opq_result.csv", train, base, query[:100,:], gt, m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means")
-    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means")
-    evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means")
-    evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+    evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+    evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++")
-    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++")
-    evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++")
-    evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++")
+    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+    evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+    evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
-    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
-    evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
-    evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+    evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+    evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
-    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
-    evaluate(apq_result, f"./results/{dataset_name}/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
-    evaluate(opq_result, f"./results/{dataset_name}/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means")
+    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+    evaluate(apq_result, f"./results/{dataset_name}/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+    evaluate(opq_result, f"./results/{dataset_name}/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
 
 
     evaluate(exact_result, f"./results/{dataset_name}/brute_result.csv", base, query[:100,:], gt)

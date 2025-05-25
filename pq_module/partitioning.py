@@ -80,6 +80,6 @@ def train_partitioning(X, n_clusters):
     for dim_idx, label in enumerate(dim_labels):
         clusters[label].append(dim_idx)
 
-    clusters = rebalance_clusters(clusters)
+    clusters = rebalance_clusters(clusters, n_clusters)
 
     return clusters

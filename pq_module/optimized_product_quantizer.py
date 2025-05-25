@@ -117,4 +117,3 @@ class OptimizedProductQuantizer:
         results = Parallel(n_jobs=-1)(delayed(process_query)(Q_rot[b]) for b in range(B))
         dists, idxs = zip(*results)
         return list(dists), list(idxs)
-

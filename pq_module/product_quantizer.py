@@ -86,29 +86,3 @@ class ProductQuantizer:
 
         all_distances, all_indices = zip(*results)
         return list(all_distances), list(all_indices)
-
-    def exact_search(self, queries, X, topk=10):
-        """
-        query: (B, D) 형태의 원본 쿼리 벡터들
-        X: (N, D) 압축되지 않은 데이터 벡터들
-        topk: 상위 k개 인덱스 반환
-        """
-        assert queries.shape[1] == X.shape[1]
-        B = queries.shape[0]
-
-        all_distances = []
-        all_indices = []
-
-        for b in range(B):
-            query = queries[b]
-            # 1. 거리 계산
-            diff = X - query.reshape(1, -1)
-            distances = np.sum(diff**2, axis=1)
-
-            # 2. top-k 추출
-            topk_idx = np.argpartition(distances, topk)[:topk]
-            topk_sorted = topk_idx[np.argsort(distances[topk_idx])]
-            all_distances.append(distances[topk_sorted])
-            all_indices.append(topk_sorted)
-
-        return all_distances, all_indices  # 각각 (B, topk) 형태의 리스트

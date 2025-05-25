@@ -1,0 +1,67 @@
+🧠 k-means pq training start
+⏱️ k-means pq training time: 3.8208440800081007
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.5159324730047956
+🎯 [K-MEANS PQ] RECALL: 0.1514
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 2.1721542080049403
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.21322092099580914
+🎯 [K-MEANS PQ] RECALL: 0.1514
+
+🧠 k-means pq training start
+⏱️ k-means pq training time: 2.3082446469925344
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.24373190199548844
+🎯 [K-MEANS PQ] RECALL: 0.1514
+
+[m=4]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 2.118636876999517
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.24559423999744467
+🎯 [K-MEANS PQ] RECALL: 0.1514
+
+[m=8]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 2.092374853993533
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.38728610800171737
+🎯 [K-MEANS PQ] RECALL: 0.22750000000000006
+
+[m=16]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 3.0272612380067585
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.5796408729947871
+🎯 [K-MEANS PQ] RECALL: 0.3376999999999999
+
+[m=30]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 5.6419363070017425
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.6662138110114029
+🎯 [K-MEANS PQ] RECALL: 0.43689999999999996
+
+[m=60]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 10.297445674994378
+🔍 k-means pq search start
+⌛ k-means pq search time: 0.9728566400008276
+🎯 [K-MEANS PQ] RECALL: 0.5268000000000002
+
+[m=120]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 21.601489148000837
+🔍 k-means pq search start
+⌛ k-means pq search time: 2.04571035700792
+🎯 [K-MEANS PQ] RECALL: 0.6762999999999996
+
+[m=240]
+🧠 k-means pq training start
+⏱️ k-means pq training time: 37.13272053901164
+🔍 k-means pq search start
+⌛ k-means pq search time: 5.998239566994016
+🎯 [K-MEANS PQ] RECALL: 0.8402999999999998
+

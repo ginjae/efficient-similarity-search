@@ -29,24 +29,24 @@ datasets used: [DOWNLOAD](https://unistackr0-my.sharepoint.com/:u:/g/personal/jm
 - Deep: 96-dimensional image (sliced from [Deep1B](https://github.com/arbabenko/GNOIMI/blob/master/downloadDeep1B.py))
     - learn: 100,000
     - base: 1,000,000
-    - query: 10,000
+    - query: 100
 
 - Fashion-MNIST: 784-dimensional image (scikit-learn)
     - learn: 5,000
     - base: 50,000
-    - query: 10,000
+    - query: 100
 
 - GIST: 960-dimensional image (sliced from [ANN_GIST1M](http://corpus-texmex.irisa.fr/))
     - learn: 10,000
     - base: 100,000
-    - query: 1,000
+    - query: 100
 
 - GloVe: 300-dimensional text (sliced from [glove.6B.300d](https://nlp.stanford.edu/projects/glove/))
     - learn: 10,000
     - base: 100,000
-    - query: 1,000
+    - query: 100
 
 <!-- - SIFT: 128-dimensional ([ANN_SIFT1M](http://corpus-texmex.irisa.fr/))
     - learn: 100,000
     - base: 1,000,000
-    - query: 10,000 -->
+    - query: 100 -->
