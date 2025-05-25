@@ -1,5 +1,7 @@
 # CSE304 Term Project
 20211061 Jaemin Kim
+<br>
+<br>
 
 # Efficient Similarity Search via Adaptive Product Quantization
 
@@ -10,17 +12,20 @@ conda activate ess_env
 conda install -c pytorch -c nvidia faiss-gpu=1.7.0 pytorch=*=*cuda* pytorch-cuda=11 numpy psutil scikit-learn
 python eval.py <dataset_name>
 ```
+<br>
 
 ## Clustering Methods
 ### 1. K-Means
 ### 2. K-Means++
 ### 3. Mini-Batch K-Means
 ### 4. Bisecting K-Means
+<br>
 
 ## Partitioning Methods
 ### 1. Fixed Partitioning
 ### 2. Adaptive Partitioning via Correlation-Based Clustering
 ### 3. Adaptive Partitioning via a Learned Rotation Matrix (Optimized Product Quantization)
+<br>
 
 ## Experiments
 ### Datasets
