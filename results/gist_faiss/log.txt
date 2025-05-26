@@ -1,0 +1,30 @@
+🧠 faiss flat training start
+⏱️ faiss flat training time: 0.06451429698790889
+🔍 faiss flat search start
+⌛ faiss flat search time: 0.15423157199984416
+🎯 [FAISS FLAT] RECALL: 1.000
+
+🧠 faiss pq training start
+⏱️ faiss pq training time: 5.3467284420039505
+🔍 faiss pq search start
+⌛ faiss pq search time: 0.01817040500463918
+🎯 [FAISS PQ] RECALL: 0.343
+
+🧠 faiss opq training start
+⏱️ faiss opq training time: 98.32502306399692
+🔍 faiss opq search start
+⌛ faiss opq search time: 0.0696391660021618
+🎯 [FAISS OPQ] RECALL: 0.490
+
+🧠 faiss hnsw training start
+⏱️ faiss hnsw training time: 6.127788854995742
+🔍 faiss hnsw search start
+⌛ faiss hnsw search time: 0.007625458994880319
+🎯 [FAISS HNSW] RECALL: 0.411
+
+🧠 faiss hnswpq training start
+⏱️ faiss hnswpq training time: 8.476432512004976
+🔍 faiss hnswpq search start
+⌛ faiss hnswpq search time: 0.00255235999065917
+🎯 [FAISS HNSWPQ] RECALL: 0.311
+

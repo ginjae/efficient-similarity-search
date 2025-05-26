@@ -192,6 +192,23 @@ def opq_result(train, base, query, gt, clustering, m):
     print(f"🎯 [{clustering.upper()} OPQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
+def faiss_flat_result(train, base, query, gt, m):
+    indexFlat = faiss.IndexFlat(train.shape[1])
+    print("🧠 faiss flat training start")
+    training_start = time.perf_counter()
+    indexFlat.train(train)
+    indexFlat.add(base)
+    training_end = time.perf_counter()
+    print(f"⏱️ faiss flat training time: {training_end - training_start}")
+
+    print("🔍 faiss flat search start")
+    search_start = time.perf_counter()
+    _, topk_idx = indexFlat.search(query, 100)
+    search_end = time.perf_counter()
+    print(f"⌛ faiss flat search time: {search_end - search_start}")
+    print(f"🎯 [FAISS FLAT] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
+    print()
+
 def faiss_pq_result(train, base, query, gt, m):
     indexPQ = faiss.IndexPQ(train.shape[1], m, 8, faiss.METRIC_L2)
     print("🧠 faiss pq training start")
@@ -206,7 +223,7 @@ def faiss_pq_result(train, base, query, gt, m):
     _, topk_idx = indexPQ.search(query, 100)
     search_end = time.perf_counter()
     print(f"⌛ faiss pq search time: {search_end - search_start}")
-    print(f"🎯 [FAISS PQ] RECALL: {get_recall(topk_idx, gt, 100)}")
+    print(f"🎯 [FAISS PQ] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
 def faiss_opq_result(train, base, query, gt, m):
@@ -225,7 +242,42 @@ def faiss_opq_result(train, base, query, gt, m):
     _, topk_idx = index.search(query, 100)
     search_end = time.perf_counter()
     print(f"⌛ faiss opq search time: {search_end - search_start}")
-    print(f"🎯 [FAISS OPQ] RECALL: {get_recall(topk_idx, gt, 100)}")
+    print(f"🎯 [FAISS OPQ] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
+    print()
+
+def faiss_hnsw_result(train, base, query, gt, m):
+    indexHNSW = faiss.IndexHNSWFlat(train.shape[1], m)
+    print("🧠 faiss hnsw training start")
+    training_start = time.perf_counter()
+    indexHNSW.train(train)
+    indexHNSW.add(base)
+    training_end = time.perf_counter()
+    print(f"⏱️ faiss hnsw training time: {training_end - training_start}")
+
+    print("🔍 faiss hnsw search start")
+    search_start = time.perf_counter()
+    _, topk_idx = indexHNSW.search(query, 100)
+    search_end = time.perf_counter()
+    print(f"⌛ faiss hnsw search time: {search_end - search_start}")
+    print(f"🎯 [FAISS HNSW] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
+    print()
+
+def faiss_hnswpq_result(train, base, query, gt, m):
+    indexHNSWPQ = faiss.IndexHNSWPQ(train.shape[1], m, 32)
+    # indexHNSWPQ.pq = faiss.ProductQuantizer(train.shape[1], m, 8)
+    print("🧠 faiss hnswpq training start")
+    training_start = time.perf_counter()
+    indexHNSWPQ.train(train)
+    indexHNSWPQ.add(base)
+    training_end = time.perf_counter()
+    print(f"⏱️ faiss hnswpq training time: {training_end - training_start}")
+
+    print("🔍 faiss hnswpq search start")
+    search_start = time.perf_counter()
+    _, topk_idx = indexHNSWPQ.search(query, 100)
+    search_end = time.perf_counter()
+    print(f"⌛ faiss hnswpq search time: {search_end - search_start}")
+    print(f"🎯 [FAISS HNSWPQ] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
 def evaluate(func,filename, *args):
@@ -263,12 +315,13 @@ if __name__ == "__main__":
         sys.exit(1)
     
     arg = sys.argv[1].lower()
-    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove" and arg != "gist_m":
+    if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove"\
+        and arg != "gist_m" and arg != "gist_faiss":
         print('Available Datasets: "sift", "gist", "deep", "fashion-mnist", "glove"')
         sys.exit(1)
 
 
-    if arg == "gist_m":
+    if arg == "gist_m" or arg == "gist_faiss":
         dataset_name = "gist"
     else:
         dataset_name = arg
@@ -328,6 +381,15 @@ if __name__ == "__main__":
         print("[m=240]")
         evaluate(pq_result, f"./results/{arg}/k-means_pq_m_240.csv", train, base, query[:100,:], gt, "k-means", 240)
         exit(0)
+
+    elif arg == "gist_faiss":
+        evaluate(faiss_flat_result, f"./results/{arg}/faiss_flat_result.csv", train, base, query[:100,:], gt, m)
+        evaluate(faiss_pq_result, f"./results/{arg}/faiss_pq_result.csv", train, base, query[:100,:], gt, m)
+        evaluate(faiss_opq_result, f"./results/{arg}/faiss_opq_result.csv", train, base, query[:100,:], gt, m)
+        evaluate(faiss_hnsw_result, f"./results/{arg}/faiss_hnsw_result.csv", train, base, query[:100,:], gt, m)
+        evaluate(faiss_hnswpq_result, f"./results/{arg}/faiss_hnswpq_result.csv", train, base, query[:100,:], gt, m)
+        exit(0)
+
 
     evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt, m)
     evaluate(faiss_opq_result, f"./results/{dataset_name}/faiss_opq_result.csv", train, base, query[:100,:], gt, m)
