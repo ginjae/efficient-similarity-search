@@ -316,12 +316,12 @@ if __name__ == "__main__":
     
     arg = sys.argv[1].lower()
     if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove"\
-        and arg != "gist_m" and arg != "gist_faiss":
+        and arg != "gist_m" and arg != "gist_faiss" and arg != "gist_poster":
         print('Available Datasets: "sift", "gist", "deep", "fashion-mnist", "glove"')
         sys.exit(1)
 
 
-    if arg == "gist_m" or arg == "gist_faiss":
+    if "gist" in arg:
         dataset_name = "gist"
     else:
         dataset_name = arg
@@ -353,6 +353,9 @@ if __name__ == "__main__":
         m = 30
     else:
         m = 16
+    
+    """ FOR POSTER (GIST) """
+    m = 160 if arg == "gist_poster" else m
 
     # print(f"[Dataset: {dataset_name}]")
     # print(f"📌 Vector dimension: {train.shape[1]}")
@@ -380,7 +383,6 @@ if __name__ == "__main__":
         evaluate(pq_result, f"./results/{arg}/k-means_pq_m_120.csv", train, base, query[:100,:], gt, "k-means", 120)
         print("[m=240]")
         evaluate(pq_result, f"./results/{arg}/k-means_pq_m_240.csv", train, base, query[:100,:], gt, "k-means", 240)
-        exit(0)
 
     elif arg == "gist_faiss":
         evaluate(faiss_flat_result, f"./results/{arg}/faiss_flat_result.csv", train, base, query[:100,:], gt, m)
@@ -388,37 +390,54 @@ if __name__ == "__main__":
         evaluate(faiss_opq_result, f"./results/{arg}/faiss_opq_result.csv", train, base, query[:100,:], gt, m)
         evaluate(faiss_hnsw_result, f"./results/{arg}/faiss_hnsw_result.csv", train, base, query[:100,:], gt, m)
         evaluate(faiss_hnswpq_result, f"./results/{arg}/faiss_hnswpq_result.csv", train, base, query[:100,:], gt, m)
-        exit(0)
+
+    elif arg == "gist_poster":
+        evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+
+        evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+
+        evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+
+        evaluate(exact_result, f"./results/{dataset_name}/brute_result.csv", base, query[:100,:], gt)
+
+    else:
+        evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt, m)
+        evaluate(faiss_opq_result, f"./results/{dataset_name}/faiss_opq_result.csv", train, base, query[:100,:], gt, m)
 
 
-    evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt, m)
-    evaluate(faiss_opq_result, f"./results/{dataset_name}/faiss_opq_result.csv", train, base, query[:100,:], gt, m)
+        evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
-    evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
-    evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
-    evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
-    evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
-    evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
-    evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
-    evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
-    evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
-    evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+        evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+        evaluate(apq_result, f"./results/{dataset_name}/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+        evaluate(opq_result, f"./results/{dataset_name}/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
 
 
-    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
-    evaluate(pq_result, f"./results/{dataset_name}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
-    evaluate(apq_result, f"./results/{dataset_name}/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
-    evaluate(opq_result, f"./results/{dataset_name}/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
-
-
-    evaluate(exact_result, f"./results/{dataset_name}/brute_result.csv", base, query[:100,:], gt)
+        evaluate(exact_result, f"./results/{dataset_name}/brute_result.csv", base, query[:100,:], gt)
 
 

@@ -24,7 +24,7 @@ python eval.py <dataset_name>
 ## Partitioning Methods
 ### 1. Fixed Partitioning
 ### 2. Adaptive Partitioning via Correlation-Based Clustering
-### 3. Adaptive Partitioning via a Learned Rotation Matrix (Optimized Product Quantization)
+### 3. Rotation-Based Partitioning (Optimized Product Quantization)
 <br>
 
 ## Experiments
