@@ -134,10 +134,13 @@ def exact_search(queries, X, topk=10):
 """ Evaluation """
 def exact_result(base, query, gt):
     print("🔍 exact search start")
-    search_start = time.perf_counter()
-    _, topk_idx = exact_search(query, base, 100)
-    search_end = time.perf_counter()
-    print(f"⌛ exact search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = exact_search(query, base, 100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ exact search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [EXACT] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
@@ -151,10 +154,13 @@ def pq_result(train, base, query, gt, clustering, m):
     print(f"⏱️ {clustering} pq training time: {training_end - training_start}")
 
     print(f"🔍 {clustering} pq search start")
-    search_start = time.perf_counter()
-    _, topk_idx = pq.search(query, topk=100)
-    search_end = time.perf_counter()
-    print(f"⌛ {clustering} pq search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = pq.search(query, topk=100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ {clustering} pq search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [{clustering.upper()} PQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
@@ -168,10 +174,13 @@ def apq_result(train, base, query, gt, clustering, m):
     print(f"⏱️ {clustering} apq training time: {training_end - training_start}")
 
     print(f"🔍 {clustering} apq search start")
-    search_start = time.perf_counter()
-    _, topk_idx = pq.search(query, topk=100)
-    search_end = time.perf_counter()
-    print(f"⌛ {clustering} apq search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = pq.search(query, topk=100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ {clustering} apq search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [{clustering.upper()} APQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
@@ -185,10 +194,13 @@ def opq_result(train, base, query, gt, clustering, m):
     print(f"⏱️ {clustering} opq training time: {training_end - training_start}")
 
     print(f"🔍 {clustering} opq search start")
-    search_start = time.perf_counter()
-    _, topk_idx = pq.search(query, topk=100)
-    search_end = time.perf_counter()
-    print(f"⌛ {clustering} opq search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = pq.search(query, topk=100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ {clustering} opq search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [{clustering.upper()} OPQ] RECALL: {get_recall(topk_idx, gt, 100)}")
     print()
 
@@ -202,10 +214,13 @@ def faiss_flat_result(train, base, query, gt, m):
     print(f"⏱️ faiss flat training time: {training_end - training_start}")
 
     print("🔍 faiss flat search start")
-    search_start = time.perf_counter()
-    _, topk_idx = indexFlat.search(query, 100)
-    search_end = time.perf_counter()
-    print(f"⌛ faiss flat search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = indexFlat.search(query, 100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ faiss flat search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [FAISS FLAT] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
@@ -219,10 +234,13 @@ def faiss_pq_result(train, base, query, gt, m):
     print(f"⏱️ faiss pq training time: {training_end - training_start}")
 
     print("🔍 faiss pq search start")
-    search_start = time.perf_counter()
-    _, topk_idx = indexPQ.search(query, 100)
-    search_end = time.perf_counter()
-    print(f"⌛ faiss pq search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = indexPQ.search(query, 100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ faiss pq search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [FAISS PQ] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
@@ -238,10 +256,13 @@ def faiss_opq_result(train, base, query, gt, m):
     print(f"⏱️ faiss opq training time: {training_end - training_start}")
 
     print("🔍 faiss opq search start")
-    search_start = time.perf_counter()
-    _, topk_idx = index.search(query, 100)
-    search_end = time.perf_counter()
-    print(f"⌛ faiss opq search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = index.search(query, 100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ faiss opq search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [FAISS OPQ] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
@@ -255,10 +276,13 @@ def faiss_hnsw_result(train, base, query, gt, m):
     print(f"⏱️ faiss hnsw training time: {training_end - training_start}")
 
     print("🔍 faiss hnsw search start")
-    search_start = time.perf_counter()
-    _, topk_idx = indexHNSW.search(query, 100)
-    search_end = time.perf_counter()
-    print(f"⌛ faiss hnsw search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = indexHNSW.search(query, 100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ faiss hnsw search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [FAISS HNSW] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
@@ -273,10 +297,13 @@ def faiss_hnswpq_result(train, base, query, gt, m):
     print(f"⏱️ faiss hnswpq training time: {training_end - training_start}")
 
     print("🔍 faiss hnswpq search start")
-    search_start = time.perf_counter()
-    _, topk_idx = indexHNSWPQ.search(query, 100)
-    search_end = time.perf_counter()
-    print(f"⌛ faiss hnswpq search time: {search_end - search_start}")
+    search_times = []
+    for i in range(10):
+        search_start = time.perf_counter()
+        _, topk_idx = indexHNSWPQ.search(query, 100)
+        search_end = time.perf_counter()
+        search_times.append(search_end - search_start)
+    print(f"⌛ faiss hnswpq search time: {sum(search_times) / len(search_times)}")
     print(f"🎯 [FAISS HNSWPQ] RECALL: {get_recall(topk_idx, gt, 100):.3f}")
     print()
 
@@ -316,13 +343,15 @@ if __name__ == "__main__":
     
     arg = sys.argv[1].lower()
     if arg != "sift" and arg != "gist" and arg != "deep" and arg != "fashion-mnist" and arg != "glove"\
-        and arg != "gist_m" and arg != "gist_faiss" and arg != "gist_poster":
+        and arg != "gist_m" and arg != "gist_faiss" and arg != "gist_poster" and arg != "deep_poster":
         print('Available Datasets: "sift", "gist", "deep", "fashion-mnist", "glove"')
         sys.exit(1)
 
 
     if "gist" in arg:
         dataset_name = "gist"
+    elif "deep" in arg:
+        dataset_name = "deep"
     else:
         dataset_name = arg
     dataset = load_dataset(dataset_name)
@@ -391,23 +420,34 @@ if __name__ == "__main__":
         evaluate(faiss_hnsw_result, f"./results/{arg}/faiss_hnsw_result.csv", train, base, query[:100,:], gt, m)
         evaluate(faiss_hnswpq_result, f"./results/{arg}/faiss_hnswpq_result.csv", train, base, query[:100,:], gt, m)
 
-    elif arg == "gist_poster":
-        evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
-        evaluate(pq_result, f"./results/{dataset_name}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
-        evaluate(apq_result, f"./results/{dataset_name}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
-        evaluate(opq_result, f"./results/{dataset_name}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+    elif arg == "gist_poster" or arg == "deep_poster":
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(pq_result, f"./results/{arg}/k-means_pq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(apq_result, f"./results/{arg}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(apq_result, f"./results/{arg}/k-means_apq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(opq_result, f"./results/{arg}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
+        evaluate(opq_result, f"./results/{arg}/k-means_opq_result.csv", train, base, query[:100,:], gt, "k-means", m)
 
-        evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
-        evaluate(pq_result, f"./results/{dataset_name}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
-        evaluate(apq_result, f"./results/{dataset_name}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
-        evaluate(opq_result, f"./results/{dataset_name}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(pq_result, f"./results/{arg}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(pq_result, f"./results/{arg}/k-means++_pq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(apq_result, f"./results/{arg}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(apq_result, f"./results/{arg}/k-means++_apq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(opq_result, f"./results/{arg}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
+        evaluate(opq_result, f"./results/{arg}/k-means++_opq_result.csv", train, base, query[:100,:], gt, "k-means++", m)
 
-        evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
-        evaluate(pq_result, f"./results/{dataset_name}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
-        evaluate(apq_result, f"./results/{dataset_name}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
-        evaluate(opq_result, f"./results/{dataset_name}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(pq_result, f"./results/{arg}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(pq_result, f"./results/{arg}/mini-batch-k-menas_pq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(apq_result, f"./results/{arg}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(apq_result, f"./results/{arg}/mini-batch-k-menas_apq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(opq_result, f"./results/{arg}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        evaluate(opq_result, f"./results/{arg}/mini-batch-k-menas_opq_result.csv", train, base, query[:100,:], gt, "mini-batch-k-means", m)
+        
+        # evaluate(pq_result, f"./results/{arg}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+        # evaluate(pq_result, f"./results/{arg}/bisecting-k-means_pq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+        # evaluate(apq_result, f"./results/{arg}/bisecting-k-means_apq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
+        # evaluate(opq_result, f"./results/{arg}/bisecting-k-means_opq_result.csv", train, base, query[:100,:], gt, "bisecting-k-means", m)
 
-        evaluate(exact_result, f"./results/{dataset_name}/brute_result.csv", base, query[:100,:], gt)
+        evaluate(exact_result, f"./results/{arg}/brute_result.csv", base, query[:1000,:], gt)
 
     else:
         evaluate(faiss_pq_result, f"./results/{dataset_name}/faiss_pq_result.csv", train, base, query[:100,:], gt, m)
