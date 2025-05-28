@@ -22,9 +22,9 @@ python eval.py <dataset_name>
 <br>
 
 ## Partitioning Methods
-### 1. Fixed Partitioning
+### 1. Fixed and Sequential Partitioning (Product Quantization)
 ### 2. Adaptive Partitioning via Correlation-Based Clustering
-### 3. Applying Rotation before Partitioning (Optimized Product Quantization)
+### 3. Rotation-based Partitioning (Optimized Product Quantization)
 <br>
 
 ## Experiments
