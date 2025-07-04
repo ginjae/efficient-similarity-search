@@ -1,11 +1,11 @@
-# CSE304 Term Project
+# 📌 CSE304 Term Project
 20211061 Jaemin Kim
 <br>
 <br>
 
-# Efficient Similarity Search via Adaptive Product Quantization
+# 🔍 Efficient Similarity Search via Adaptive Product Quantization
 
-## Quick Start
+## 🚀 Quick Start
 ```bash
 conda create --name ess_env
 conda activate ess_env
@@ -14,7 +14,17 @@ python eval.py <dataset_name>
 ```
 <br>
 
-## Clustering Methods
+## 📄 Paper
+[View pdf](https://unistackr0-my.sharepoint.com/:b:/g/personal/jm611_unist_ac_kr/EVvHbGS7CQhBsCpsq4MK7ewBaBIAA30Aoy_EHC2a_byV7Q?e=R7fjeM)
+
+<br>
+
+## 🖼️ Poster
+![poster1](./poster/poster1.png)
+![poster2](./poster/poster2.png)
+
+
+<!-- ## Clustering Methods
 ### 1. K-Means
 ### 2. K-Means++
 ### 3. Mini-Batch K-Means
@@ -24,14 +34,14 @@ python eval.py <dataset_name>
 ## Partitioning Methods
 ### 1. Fixed and Sequential Partitioning (Product Quantization)
 ### 2. Adaptive Partitioning via Correlation-Based Clustering
-### 3. Rotation-based Partitioning (Optimized Product Quantization)
+### 3. Rotation-based Partitioning (Optimized Product Quantization) -->
 <br>
 
-## Experiments
+## 📊 Experiments
 ### Datasets
-datasets used: [DOWNLOAD](https://unistackr0-my.sharepoint.com/:u:/g/personal/jm611_unist_ac_kr/ES1UA4V2i45Fmqu-_1BkFW0BhkaE7JAkA9Cha2G5w3G1Ag?e=EKfurg)
+<!-- datasets used: [DOWNLOAD](https://unistackr0-my.sharepoint.com/:u:/g/personal/jm611_unist_ac_kr/ES1UA4V2i45Fmqu-_1BkFW0BhkaE7JAkA9Cha2G5w3G1Ag?e=EKfurg) -->
 
-- Deep: 96-dimensional image (sliced from [Deep1B](https://github.com/arbabenko/GNOIMI/blob/master/downloadDeep1B.py))
+- Deep: 96-dimensional image (subset of [Deep1B](https://github.com/arbabenko/GNOIMI/blob/master/downloadDeep1B.py))
     - learn: 100,000
     - base: 1,000,000
     - query: 100
@@ -41,12 +51,12 @@ datasets used: [DOWNLOAD](https://unistackr0-my.sharepoint.com/:u:/g/personal/jm
     - base: 50,000
     - query: 100
 
-- GIST: 960-dimensional image (sliced from [ANN_GIST1M](http://corpus-texmex.irisa.fr/))
+- GIST: 960-dimensional image (subset of [ANN_GIST1M](http://corpus-texmex.irisa.fr/))
     - learn: 10,000
     - base: 100,000
     - query: 100
 
-- GloVe: 300-dimensional text (sliced from [glove.6B.300d](https://nlp.stanford.edu/projects/glove/))
+- GloVe: 300-dimensional text (subset of [glove.6B.300d](https://nlp.stanford.edu/projects/glove/))
     - learn: 10,000
     - base: 100,000
     - query: 100
